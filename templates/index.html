@@ -1,0 +1,120 @@
+{{define "title"}} list {{end}}
+{{define "css"}}
+<style>
+    #files .fname:hover {
+        cursor: pointer;
+    }
+    
+    .btns {
+        /* position: fixed; */
+    }
+    
+    .files-wrapper {
+        /* margin-top: 4rem;
+           /* height: 500px; */
+        /* overflow: auto; */
+    }
+    
+    #files {
+        /* margin-top: 3rem; */
+        height: 500px;
+        overflow: auto;
+        border-top: 1px solid gray;
+        ;
+    }
+    
+    .breadcrumb {
+        /* position: fixed; */
+    }
+</style>
+{{end}}
+
+{{define "body"}}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Library</li>
+    </ol>
+</nav>
+<div class="btns">
+    <button id="download"> <i class="fas fa-download fa-2x"></i></button>
+    <button><i class="fas fa-folder fa-2x"></i></button>
+</div>
+<div class="files-wrapper">
+    <div id="files">
+        <table class="table">
+            <thead>
+                <th>Name</th>
+                <th>Size</th>
+                <th>LastModified</th>
+                <th></th>
+            </thead>
+            <tbody>
+                {{range .}}
+                <tr>
+                    <td>
+                        {{if .IsDir}}
+                        <i class="fas fa-folder"></i>
+                        <span class="fname" data-type="dir">{{.Name}}</span> {{else}}
+                        <i class="fas fa-file"></i>
+                        <span class="fname" data-type="file">{{.Name}}</span> {{end}}
+                    </td>
+                    <td>{{.Size|cap}}</td>
+                    <td>{{.LastModified.Format "2006-01-02 15:04:05"}}</td>
+                    <td><i class="fas fa-download"></i></td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+</div>
+{{end}} {{define "script"}}
+<script>
+    $(document).ready(function() {
+        $("#files").on('click', 'tr', function(e) {
+            $("tr").removeClass('selected');
+            $(this).addClass('selected');
+        });
+
+        var url = window.location.href.replace(/\/$/, ""); // remove end slash
+        $("#files").on('dblclick', '.fname', function(e) {
+            var name = $(this).text();
+            var type = $(this).attr('data-type');
+            url=url+"/"+name;
+            // only directory
+            if(type=="dir"){
+                $.ajax({
+                    url: '/',
+                    type: 'GET',
+                    data: {
+                        isdir: type,
+                        name: name,
+                        method: "ajax",
+                        url:url
+
+                    },
+                    success: function(ret) {
+                        if(ret.trim().length==0){
+                            $('#files').html("null")
+                            return;
+                        }
+                        console.log("name:",name)
+                        $('#files tbody').html(ret);
+                        //var href = window.location.href;
+                        //var url = href.replace(/\/$/, ""); // remove end slash
+                        //window.history.replaceState("any", "x", url + "/" + name)
+                        // window.history.replaceState("any","x",url+"/"+name)
+                        $('.breadcrumb').append('<li class="breadcrumb-item">'+url+'</li>')
+                    }
+                }); // end ajax
+            }
+        });
+        
+
+        $('#download').click(function() {
+            console.log("download")
+
+        })
+    });
+</script>
+{{end}}
