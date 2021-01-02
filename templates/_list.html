@@ -1,16 +1,25 @@
-{{range .}}
-<tr>
-    <td>
-        {{if .IsDir}}
-        <i class="fas fa-folder"></i>
-        <span class="fname" data-type="dir">{{.Name}}</span>
-        {{else}}
-        <i class="fas fa-file"></i>
-        <span class="fname" data-type="file">{{.Name}}</span>
+<table class="table">
+    <thead>
+        <th>Name</th>
+        <th>Size</th>
+        <th>LastModified</th>
+        <th></th>
+    </thead>
+    <tbody>
+        {{range .}}
+        <tr>
+            <td>
+                {{if .IsDir}}
+                <i class="fas fa-folder"></i>
+                {{else}}
+                <i class="fas fa-file"></i>
+                {{end}}
+                <span class="fname" data-isdir="{{.IsDir}}" data-path="{{.Path}}">{{.Name}}</span>
+            </td>
+            <td>{{.Size|cap}}</td>
+            <td>{{.LastModified.Format "2006-01-02 15:04:05"}}</td>
+            <td><i class="fas fa-download"></i></td>
+        </tr>
         {{end}}
-    </td>
-    <td>{{.Size|cap}}</td>
-    <td>{{.LastModified.Format "2006-01-02 15:04:05"}}</td>
-    <td><i class="fas fa-download"></i></td>
-</tr>
-{{end}}
+    </tbody>
+</table>

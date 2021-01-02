@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"net/url"
+	"strings"
 	"text/template"
 	"time"
 )
@@ -55,7 +55,7 @@ func renderPartial(w http.ResponseWriter, fileName, filePath string,
 	}
 }
 
-var root = "C:/test"
+// var root = "C:/test"
 
 func main() {
 	// static files
@@ -63,8 +63,6 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	http.HandleFunc("/", index)
-	http.HandleFunc("/dl", download)
-	http.HandleFunc("/open", open)
 
 	fmt.Println("start...")
 	http.ListenAndServe(":9000", nil)
@@ -72,37 +70,25 @@ func main() {
 
 // file list
 func index(w http.ResponseWriter, r *http.Request) {
-	name := r.URL.Query().Get("name")
-	isdir := r.URL.Query().Get("isdir")
+	// name := r.URL.Query().Get("name")
+	//isdir := r.URL.Query().Get("isdir")
 	method := r.URL.Query().Get("method")
-	href := r.URL.Query().Get("href")
+	path := r.URL.Query().Get("path") // http://localhost:9000/a
 
 	funcMap := template.FuncMap{
 		"cap": util.ConvertByteTo,
 	}
 
 	if method == "" {
-		root = "C:/test"
+		root := "C:/test"
 		files := GetFiles(root)
 		render(w, r, "./templates/index.html", funcMap, files)
 	} else {
-		if isdir == "dir" {
-			root = root + "/" + name
-		}
-		fmt.Println("href:", href)
-		u, _ := url.Parse(href)
-		// root = root + u.Path + name
-		fmt.Println("root:", u.Path)
-		files := GetFiles(root)
+		files := GetFiles("C:/test" + path)
 		fileName := "_list.html"
 		filePath := "./templates/_list.html"
 		renderPartial(w, fileName, filePath, funcMap, files)
 	}
-}
-
-func download(w http.ResponseWriter, r *http.Request) {
-	files := GetFiles(root)
-	render(w, r, "./templates/download.html", nil, files)
 }
 
 func GetFiles(dir string) []File {
@@ -113,24 +99,15 @@ func GetFiles(dir string) []File {
 	}
 	var myFiles []File
 	for _, file := range files {
+		path := strings.Replace(dir, "C:/test", "", -1) // TODO: const root
 		f := File{
 			Name:         file.Name(),
 			IsDir:        file.IsDir(),
 			Size:         file.Size(),
 			LastModified: file.ModTime(),
-			Path:         dir,
+			Path:         path,
 		}
 		myFiles = append(myFiles, f)
 	}
 	return myFiles
-}
-
-func open(w http.ResponseWriter, r *http.Request) {
-	//w.Write([]byte("dir"))
-	path := r.URL.Query().Get("path")
-	files := GetFiles(root + "/" + path)
-	funcMap := template.FuncMap{
-		"cap": util.ConvertByteTo,
-	}
-	render(w, r, "./templates/index.html", funcMap, files)
 }
