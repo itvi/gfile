@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"gfile/model"
 	"gfile/util"
 	"net/http"
@@ -27,11 +26,9 @@ func Index(dir string) http.HandlerFunc {
 		}
 
 		if method == "" {
-			fmt.Println("dir is:", dir)
 			files := model.GetFiles(dir, dir)
 			util.Render(w, r, "./templates/index.html", funcMap, files)
 		} else {
-			fmt.Println("else dir:", dir)
 			files := model.GetFiles(dir, dir+path)
 			fileName := "_list.html"
 			filePath := "./templates/_list.html"

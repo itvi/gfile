@@ -25,7 +25,7 @@ func GetFiles(dir, absolutePath string) []File {
 	for _, file := range files {
 		relativePath := strings.Replace(absolutePath, dir, "", -1)
 		if dir == absolutePath {
-			relativePath = "."
+			relativePath = "/"
 		}
 		f := File{
 			Name:         file.Name(),
