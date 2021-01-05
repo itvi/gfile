@@ -5,8 +5,10 @@
         cursor: pointer;
     }
     
-    .btns {
-        /* position: fixed; */
+    .btns button   {
+        border: 0;
+        background-color: transparent;
+        padding: 0.5rem;
     }
     
     .files-wrapper {
@@ -36,8 +38,7 @@
     </ol>
 </nav>
 <div class="btns">
-    <button id="download"> <i class="fas fa-download fa-2x"></i></button>
-    <button><i class="fas fa-folder fa-2x"></i></button>
+    <button id="download" title="下载"><i class="fas fa-download"></i></button>
 </div>
 <div class="files-wrapper">
     <div id="files">
@@ -141,6 +142,11 @@
                 $('#files').html(ret);
             }
         }
+
+        // download
+        $('#download').click(function(){
+            
+        })
     });
 </script>
 {{end}}
