@@ -1,17 +1,13 @@
 package handler
 
 import (
+	"fmt"
 	"gfile/model"
 	"gfile/util"
 	"net/http"
+	"strconv"
 	"text/template"
 )
-
-func A(dir string) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte(dir))
-	}
-}
 
 // file list
 func Index(dir string) http.HandlerFunc {
@@ -19,7 +15,7 @@ func Index(dir string) http.HandlerFunc {
 		// name := r.URL.Query().Get("name")
 		//isdir := r.URL.Query().Get("isdir")
 		method := r.URL.Query().Get("method")
-		path := r.URL.Query().Get("path") // http://localhost:9000/a
+		path := r.URL.Query().Get("path")
 
 		funcMap := template.FuncMap{
 			"cap": util.ConvertByteTo,
@@ -34,5 +30,19 @@ func Index(dir string) http.HandlerFunc {
 			filePath := "./templates/_list.html"
 			util.RenderPartial(w, fileName, filePath, funcMap, files)
 		}
+	}
+}
+
+func Download(dir string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		name := r.URL.Query().Get("name")
+		path := r.URL.Query().Get("path")
+
+		w.Header().Set("Content-Disposition", "attachment; filename="+strconv.Quote(name))
+		w.Header().Set("Content-Type", "application/octet-stream")
+
+		file := dir + path + "/" + name
+		fmt.Println(file)
+		http.ServeFile(w, r, file)
 	}
 }

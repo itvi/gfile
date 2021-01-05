@@ -21,6 +21,7 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	http.HandleFunc("/", handler.Index(*dir))
+	http.HandleFunc("/dl", handler.Download(*dir))
 
 	fmt.Println("start...", *port)
 

@@ -1,7 +1,13 @@
 $(document).ready(function() {
-    $("#files").on('click', 'tr', function(e) {
-        $("tr").removeClass('selected');
-        $(this).addClass('selected');
+    var multipleSelect=false;
+
+    $("#files").on('click', 'tr', function() {
+        if(!multipleSelect){
+            $("tr").removeClass('selected');
+            $(this).addClass('selected');
+        }else{
+            $(this).toggleClass('selected');
+        }
     });
 
     // var root = window.location.href.replace(/\/$/, ""); / *// remove end slash
@@ -70,8 +76,39 @@ $(document).ready(function() {
         }
     }
 
+    // multiple selected
+    $('#mulSel').click(function(){
+        $(this).toggleClass('multiple-select');
+        // change global variable
+        multipleSelect=multipleSelect==false?true:false;
+        console.log(multipleSelect)
+    }); // multiple select
+
     // download
     $('#download').click(function(){
-        
-    })
-});
+        // selected or not
+        var selections=$('#files .selected').length;
+        if (selections==0){
+            console.log("please select one or more rows")
+            return;
+        }
+
+        // file or directory
+        for(var i=0;i<selections;i++){
+            var ele = $('#files .selected')[i];
+            var file = $(ele).find('span');
+            var isdir = file.attr('data-isdir');
+            var name = file.text();
+            var path = file.attr('data-path');
+            console.log(isdir,name,path)
+
+            // ajax can't download
+
+            // only working the first location
+            //window.location="/dl?name="+name+"&path="+path;
+
+            window.open("/dl?name="+name+"&path="+path,'_blank')
+        }
+    });
+
+}); // end ready

@@ -3,6 +3,9 @@
     color: white;
 }
 
+.multiple-select{
+    color: red;
+}
 #files tr:hover {
     cursor: pointer;
 }
