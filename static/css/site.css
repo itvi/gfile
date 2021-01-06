@@ -33,3 +33,12 @@
 .breadcrumb {
     /* position: fixed; */
 }
+
+/* bootstrap-notify */
+button.close{
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    border: 0;
+    background-color: transparent;
+}

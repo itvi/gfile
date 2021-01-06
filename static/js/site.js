@@ -12,17 +12,19 @@ $(document).ready(function() {
 
     // var root = window.location.href.replace(/\/$/, ""); / *// remove end slash
     
-    $("#files").on('dblclick', 'tr', function(e) {
+    // open directory
+    $("#files").on('dblclick', 'tr', function() {
         var $this = $(this).find('.fname');
         var name = $this.text();
         var isdir = $this.attr('data-isdir');
         var path = $this.attr('data-path');
+
         if(path=="/"){
             path = path + name;
         }else{
             path = path + "/" + name;
         }
-        // only directory
+
         if(isdir=="true"){
             $.ajax({
                 url: '/',
@@ -69,7 +71,7 @@ $(document).ready(function() {
 
     // show files from server.
     function showFiles(ret){
-        if($(ret).find('tbody').text().trim().length==0){
+        if($(ret).find('tbody').text().trim().length == 0){
             $('#files tbody').html("空");
         }else{
             $('#files').html(ret);
@@ -80,16 +82,16 @@ $(document).ready(function() {
     $('#mulSel').click(function(){
         $(this).toggleClass('multiple-select');
         // change global variable
-        multipleSelect=multipleSelect==false?true:false;
-        console.log(multipleSelect)
-    }); // multiple select
+        multipleSelect = multipleSelect == false ? true : false;
+    });
 
     // download
     $('#download').click(function(){
         // selected or not
-        var selections=$('#files .selected').length;
-        if (selections==0){
-            console.log("please select one or more rows")
+        var selections = $('#files .selected').length;
+        if (selections == 0){
+            notify("please select");
+            console.log("please select one or more rows");
             return;
         }
 
@@ -112,3 +114,22 @@ $(document).ready(function() {
     });
 
 }); // end ready
+
+function notify(message){
+    $.notify({
+        icon: 'fa fa-info-circle',
+        message: message,
+    },{
+        type: "info",
+        allow_dismiss: true,
+        delay: 2000, // 2 seconds
+        placement:{
+            from:"top",
+            align: "center"
+        },
+        animate: {
+			enter: "animate__animated animate__fadeInDown",
+			exit: "animate__animated animate__fadeOutUp"
+		}
+    });
+}
