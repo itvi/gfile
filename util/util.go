@@ -10,6 +10,8 @@ import (
 	"path/filepath"
 	"strings"
 	"text/template"
+
+	"golang.org/x/text/encoding/simplifiedchinese"
 )
 
 // ConvertByteToMB ...
@@ -77,10 +79,18 @@ func RecursiveZip(pathToZip, destinationPath string) error {
 			return err
 		}
 		relPath := strings.TrimPrefix(filePath, filepath.Dir(pathToZip))
-		zipFile, err := myZip.Create(relPath)
+
+		// Chinese garbled code
+		path, err := utf8ToGBK(relPath)
 		if err != nil {
 			return err
 		}
+
+		zipFile, err := myZip.Create(path)
+		if err != nil {
+			return err
+		}
+
 		fsFile, err := os.Open(filePath)
 		if err != nil {
 			return err
@@ -99,4 +109,14 @@ func RecursiveZip(pathToZip, destinationPath string) error {
 		return err
 	}
 	return nil
+}
+
+func utf8ToGBK(text string) (string, error) {
+	dst := make([]byte, len(text)*2)
+	tr := simplifiedchinese.GB18030.NewEncoder()
+	nDst, _, err := tr.Transform(dst, []byte(text), true)
+	if err != nil {
+		return text, err
+	}
+	return string(dst[:nDst]), nil
 }
