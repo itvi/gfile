@@ -53,18 +53,20 @@ func Download(dir string) http.HandlerFunc {
 	}
 }
 
-func Zip(w http.ResponseWriter, r *http.Request) {
-	name := r.URL.Query().Get("name")
-	path := r.URL.Query().Get("path")
-	//fmt.Println("path:", path)
+func Zip(dir string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		name := r.URL.Query().Get("name")
+		path := r.URL.Query().Get("path")
 
-	zipName := "./zip/" + name + ".zip"
+		pathToZip := dir + path
+		zipName := "./zip/" + name + ".zip"
 
-	err := util.RecursiveZip(path, zipName)
-	if err != nil {
-		fmt.Println("zip error:", err)
-		return
+		err := util.RecursiveZip(pathToZip, zipName)
+		if err != nil {
+			fmt.Println("zip error:", err)
+			return
+		}
+
+		w.Write([]byte(zipName))
 	}
-
-	w.Write([]byte(zipName))
 }

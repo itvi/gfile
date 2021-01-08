@@ -12,7 +12,7 @@ import (
 
 func main() {
 	// port,directory
-	port := flag.String("p", ":8000", "TCP address port")
+	port := flag.String("p", "localhost:8000", "TCP address port")
 	dir := flag.String("d", ".", "User's directory")
 	flag.Parse()
 
@@ -22,7 +22,7 @@ func main() {
 
 	http.HandleFunc("/", handler.Index(*dir))
 	http.HandleFunc("/dl", handler.Download(*dir))
-	http.HandleFunc("/zip", handler.Zip)
+	http.HandleFunc("/zip", handler.Zip(*dir))
 
 	fmt.Println("start...", *port)
 
