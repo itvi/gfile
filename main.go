@@ -22,6 +22,7 @@ func main() {
 
 	http.HandleFunc("/", handler.Index(*dir))
 	http.HandleFunc("/dl", handler.Download(*dir))
+	http.HandleFunc("/zip", handler.Zip)
 
 	fmt.Println("start...", *port)
 

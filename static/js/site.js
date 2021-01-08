@@ -102,23 +102,50 @@ $(document).ready(function() {
             var isdir = file.attr('data-isdir');
             var name = file.text();
             var path = file.attr('data-path');
-            console.log(isdir,name,path)
+            // console.log(isdir,name,path)
 
-            // ajax can't download
-
-            // only working the first location
-            //window.location="/dl?name="+name+"&path="+path;
-
-            window.open("/dl?name="+name+"&path="+path,'_blank')
+            // directory will be zipped
+            if(isdir=="true"){
+                if(path == "/"){
+                    path = "";
+                }
+                path ="."+ path + "/" + name;
+                zipDir(isdir,path,name);
+            } else{
+                // ajax can't download
+                // only working the first location
+                //window.location="/dl?name="+name+"&path="+path;
+                
+                window.open("/dl?name="+name+"&path="+path,"_blank")
+            }
         }
     });
+
+    // return file path for download
+    function zipDir(isdir,path,name){
+        $.ajax({
+            url: '/zip',
+            type: 'GET',
+            data: {
+                isdir: isdir,
+                path: path,
+                name: name
+            },
+            success: function(ret){
+                window.open("/dl?name="+ret+"&isdir="+isdir,"_blank")
+            },
+            error: function(x,s,e){
+                console.log(x,s,e);
+            }
+        });
+    }
 
 }); // end ready
 
 function notify(message){
     $.notify({
         icon: 'fa fa-info-circle',
-        message: message,
+        message: message
     },{
         type: "info",
         allow_dismiss: true,
