@@ -1,6 +1,4 @@
-{{define "title"}} list {{end}}
-
-{{define "body"}}
+{{define "title"}} list {{end}} {{define "body"}}
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">Home</a></li>
@@ -8,6 +6,10 @@
 </nav>
 <div class="btns">
     <button id="download" title="下载"><i class="fas fa-download"></i></button>
+    <button id="spinner" class="btn btn-primary" type="button" disabled style="display:none">
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        Loading...
+    </button>
     <button id="mulSel" title="多选"><i class="fas fa-check-circle"></i></button>
 </div>
 <div class="files-wrapper">
@@ -23,10 +25,8 @@
                 <tr>
                     <td>
                         {{if .IsDir}}
-                        <i class="fas fa-folder"></i>
-                        {{else}}
-                        <i class="fas fa-file"></i>
-                        {{end}}
+                        <i class="fas fa-folder"></i> {{else}}
+                        <i class="fas fa-file"></i> {{end}}
                         <span class="fname" data-isdir="{{.IsDir}}" data-path="{{.Path}}">{{.Name}}</span>
                     </td>
                     <td>{{.Size|cap}}</td>

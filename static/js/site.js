@@ -1,7 +1,7 @@
-$(document).ready(function () {
+$(document).ready(function() {
     var multipleSelect = false;
 
-    $("#files").on('click', 'tr', function () {
+    $("#files").on('click', 'tr', function() {
         if (!multipleSelect) {
             $("tr").removeClass('selected');
             $(this).addClass('selected');
@@ -13,7 +13,7 @@ $(document).ready(function () {
     // var root = window.location.href.replace(/\/$/, ""); / *// remove end slash
 
     // open directory
-    $("#files").on('dblclick', 'tr', function () {
+    $("#files").on('dblclick', 'tr', function() {
         var $this = $(this).find('.fname');
         var name = $this.text();
         var isdir = $this.attr('data-isdir');
@@ -35,7 +35,7 @@ $(document).ready(function () {
                     method: "ajax",
                     path: path
                 },
-                success: function (ret) {
+                success: function(ret) {
                     showFiles(ret);
                     var li = '<li class="breadcrumb-item">' +
                         '<a href="' + path + '">' + name + '</a>' +
@@ -46,7 +46,7 @@ $(document).ready(function () {
         }
     });
 
-    $(".breadcrumb").on("click", "a", function (e) {
+    $(".breadcrumb").on("click", "a", function(e) {
         e.preventDefault();
         var name = $(this).text();
         var url = $(this).attr('href');
@@ -60,10 +60,10 @@ $(document).ready(function () {
                 method: "ajax",
                 path: url
             },
-            success: function (ret) {
+            success: function(ret) {
                 showFiles(ret);
             },
-            error: function (x, s, e) {
+            error: function(x, s, e) {
                 console.log(x, s, e);
             }
         }); // end ajax
@@ -79,14 +79,14 @@ $(document).ready(function () {
     }
 
     // multiple selected
-    $('#mulSel').click(function () {
+    $('#mulSel').click(function() {
         $(this).toggleClass('multiple-select');
         // change global variable
         multipleSelect = multipleSelect == false ? true : false;
     });
 
     // download
-    $('#download').click(function () {
+    $('#download').click(function() {
         // selected or not
         var selections = $('#files .selected').length;
         if (selections == 0) {
@@ -95,6 +95,7 @@ $(document).ready(function () {
             return;
         }
 
+        $('#spinner').css('display', 'block');
         // file or directory
         for (var i = 0; i < selections; i++) {
             var ele = $('#files .selected')[i];
@@ -119,6 +120,7 @@ $(document).ready(function () {
                 window.open("/dl?name=" + name + "&path=" + path, "_blank")
             }
         }
+        $('#spinner').css('display', 'none');
     });
 
     // return file path for download
@@ -131,12 +133,12 @@ $(document).ready(function () {
                 path: path,
                 name: name
             },
-            success: function (ret) {
+            success: function(ret) {
                 // if ret like A+B.zip then "+" will disappear
                 ret = encodeURIComponent(ret);
                 window.open("/dl?name=" + ret + "&isdir=" + isdir, "_blank")
             },
-            error: function (x, s, e) {
+            error: function(x, s, e) {
                 console.log(x, s, e);
             }
         });
