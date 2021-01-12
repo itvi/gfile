@@ -31,7 +31,7 @@ func Index(dir string) http.HandlerFunc {
 		} else {
 			files := model.GetFiles(dir, dir+path)
 			fileName := "_list.html"
-			filePath := "./templates/_list.html"
+			filePath := "./templates/partial/_list.html"
 			util.RenderPartial(w, fileName, filePath, funcMap, files)
 		}
 	}

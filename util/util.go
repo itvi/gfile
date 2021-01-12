@@ -33,7 +33,9 @@ func Render(w http.ResponseWriter, r *http.Request, name string,
 	baseFile := "layout"
 	tmpls := []string{
 		"./templates/layout.html",
-		"./templates/menu.html",
+		"./templates/partial/_menu.html",
+		"./templates/partial/_breadcrumb.html",
+		"./templates/partial/_toolbar.html",
 	}
 	tmpls = append(tmpls, name)
 

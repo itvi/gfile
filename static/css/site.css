@@ -10,6 +10,9 @@
     cursor: pointer;
 }
 
+.btns {
+    text-align: right; 
+}
 .btns button   {
     border: 0;
     background-color: transparent;
