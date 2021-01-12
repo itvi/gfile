@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"gfile/model"
 	"gfile/util"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -120,6 +121,20 @@ func Search(db *sql.DB) http.HandlerFunc {
 
 func Rebuild(dir string, db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		// clear first
+		stmt, err := db.Prepare("DELETE FROM files;")
+		if err != nil {
+			log.Println("delete prepare error:", err)
+			return
+		}
+		defer stmt.Close()
+
+		_, err = stmt.Exec()
+		if err != nil {
+			log.Println("delete exec error:", err)
+			return
+		}
+
 		rebuild(db, dir)
 		w.Write([]byte("刷新成功！"))
 	}
@@ -164,7 +179,7 @@ func rebuild(db *sql.DB, dir string) {
 			} else {
 				pathName = osPathname[len(dir):]
 			}
-			fmt.Println(count, pathName, name, isdir, size, lastModified)
+			// fmt.Println(count, pathName, name, isdir, size, lastModified)
 
 			// add to database
 			s := `INSERT INTO files(name,isdir,size,last_modified,path 
@@ -183,6 +198,5 @@ func rebuild(db *sql.DB, dir string) {
 	})
 
 	tx.Commit()
-	fmt.Println(count)
-	fmt.Println(time.Since(start))
+	fmt.Printf("Rebuild: %d items, Spend: %s\n", count, time.Since(start))
 }
