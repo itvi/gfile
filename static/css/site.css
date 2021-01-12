@@ -35,6 +35,9 @@
 
 .breadcrumb {
     /* position: fixed; */
+    background-color: #F4F7F9;
+    border: 1px dotted gray;
+    padding: 4px;
 }
 
 /* bootstrap-notify */
