@@ -175,7 +175,7 @@ func rebuild(db *sql.DB, dir string) {
 			// ./static/css
 			if dir == "." { // static\css
 				//dir = ""
-				pathName = "\\" + osPathname
+				pathName = "/" + osPathname
 			} else {
 				pathName = osPathname[len(dir):]
 			}
