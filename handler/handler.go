@@ -115,7 +115,7 @@ func Search(db *sql.DB) http.HandlerFunc {
 		funcMap := template.FuncMap{
 			"cap": util.ConvertByteTo,
 		}
-		util.Render(w, r, "./templates/index.html", funcMap, files)
+		util.Render(w, r, "./templates/search.html", funcMap, files)
 	}
 }
 

@@ -3,7 +3,6 @@
         <th>Name</th>
         <th>Size</th>
         <th>LastModified</th>
-        <th></th>
     </thead>
     <tbody>
         {{range .}}
@@ -18,7 +17,6 @@
             </td>
             <td>{{.Size|cap}}</td>
             <td>{{.LastModified.Format "2006-01-02 15:04:05"}}</td>
-            <td>{{.Path}}</td>
         </tr>
         {{end}}
     </tbody>
