@@ -21,8 +21,6 @@ $(document).ready(function () {
 
         if (path == "/") {
             path = path + name;
-        } else {
-            path = path + "/" + name;
         }
 
         if (isdir == "true") {
@@ -110,7 +108,6 @@ $(document).ready(function () {
                 if (path == "/") {
                     path = "";
                 }
-                path = path + "/" + name;
                 zipDir(isdir, path, name);
             } else {
                 // ajax can't download
@@ -144,6 +141,16 @@ $(document).ready(function () {
             }
         });
     }
+
+    // search
+    $('#search').click(function (e) {
+        var term = $('input[name="q"]')[0].value;
+        if (term.trim() == "") {
+            e.preventDefault();
+            notify("请输入要搜索的文件名（支持模糊查询）");
+            return;
+        }
+    }); // end search
 
 }); // end ready
 
