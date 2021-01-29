@@ -56,7 +56,7 @@ func Config(dir string) (*Configuration, *sql.DB) {
 
 	// session
 	session := sessions.New([]byte("afkkjfkajf!23234324#@#$"))
-	session.Lifetime = 1 * time.Hour
+	session.Lifetime = 15 * time.Minute
 
 	c := &Configuration{
 		Session: session,
