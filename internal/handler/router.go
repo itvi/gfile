@@ -11,7 +11,7 @@ import (
 func (c *Configuration) Route() http.Handler {
 	// middleware
 	m0 := alice.New(middleware.RecoverPanic, middleware.LogRequest, middleware.DefaultHeaders)
-	m1 := alice.New(c.Session.Enable, c.authenticate) //, c.authorize)
+	m1 := alice.New(c.Session.Enable, c.authenticate, c.authorize)
 
 	r := pat.New()
 
@@ -19,7 +19,7 @@ func (c *Configuration) Route() http.Handler {
 	r.Get("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static"))))
 	r.Get("/js/", http.StripPrefix("/js/", http.FileServer(http.Dir("./web/template/js"))))
 
-	// r.Get("/", m1.ThenFunc(c.Home.Index(c)))
+	r.Get("/", m1.Append(c.requireAuthenticatedUser).ThenFunc(c.File.Index(c)))
 
 	r.Get("/users/login", m1.ThenFunc(c.User.LoginView(c)))
 	r.Post("/users/login", m1.Then(http.HandlerFunc(c.User.Login(c))))
@@ -48,7 +48,7 @@ func (c *Configuration) Route() http.Handler {
 	r.Get("/auth/roles4user/:userid", m1.ThenFunc(c.Casbin.AddRolesForUserView(c)))
 	r.Post("/auth/roles4user/:userid", m1.Then(http.HandlerFunc(c.Casbin.AddRolesForUser)))
 
-	r.Get("/", m1.ThenFunc(c.File.Index(c)))
+	r.Get("/files", m1.ThenFunc(c.File.Index(c)))
 	r.Get("/zip", m1.ThenFunc(c.File.Zip(c)))
 	r.Get("/dl", m1.ThenFunc(c.File.Download(c)))
 	r.Get("/rebuild", m1.ThenFunc(c.File.Rebuild(c)))

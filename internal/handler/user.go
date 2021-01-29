@@ -258,7 +258,7 @@ func (u *UserHandler) Login(c *Configuration) http.HandlerFunc {
 		// body, _ := ioutil.ReadAll(resp.Body)
 		// log.Println(string([]byte(body)))
 
-		http.Redirect(w, r, "/", http.StatusSeeOther)
+		http.Redirect(w, r, "/files", http.StatusSeeOther)
 	}
 }
 
