@@ -3,7 +3,6 @@ package handler
 import (
 	"context"
 	"database/sql"
-	"flag"
 	"fmt"
 	"gfile/internal/model"
 	e "gfile/pkg/error"
@@ -46,9 +45,8 @@ type Configuration struct {
 type contextKey string
 
 var contextKeyUser = contextKey("user")
-var dir = flag.String("d", ".", "User's directory")
 
-func Config() (*Configuration, *sql.DB) {
+func Config(dir string) (*Configuration, *sql.DB) {
 	// database
 	db, err := openDB("./db.db")
 	if err != nil {
@@ -66,7 +64,7 @@ func Config() (*Configuration, *sql.DB) {
 		User:    &UserHandler{M: &model.UserModel{DB: db}},
 		Role:    &RoleHandler{M: &model.RoleModel{DB: db}},
 		Casbin:  &CasbinHandler{M: &model.CasbinModel{DB: db}},
-		File:    &FileHandler{M: &model.FileModel{DB: db}, Dir: *dir},
+		File:    &FileHandler{M: &model.FileModel{DB: db}, Dir: dir},
 	}
 	return c, db
 }
