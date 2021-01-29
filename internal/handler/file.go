@@ -18,6 +18,7 @@ import (
 
 type FileHandler struct {
 	Dir string
+	M   *model.FileModel
 }
 
 // file list
@@ -25,6 +26,7 @@ func (f *FileHandler) Index(c *Configuration) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		method := r.URL.Query().Get("method")
 		path := r.URL.Query().Get("path")
+		fmt.Println("method:", method)
 
 		if method == "" {
 			files := model.GetFiles(f.Dir, f.Dir)
@@ -86,69 +88,41 @@ func (f *FileHandler) Zip(c *Configuration) http.HandlerFunc {
 	}
 }
 
-func Search(db *sql.DB) http.HandlerFunc {
+func (f *FileHandler) Search(c *Configuration) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		q := r.FormValue("q")
-		s := `SELECT name,isdir,size,last_modified,path 
-			  FROM files WHERE name LIKE '%` + q + `%'`
-		rows, err := db.Query(s)
+
+		files, err := f.M.Search(q)
 		if err != nil {
-			fmt.Println(err)
+			log.Println("Get files error:", err)
 			return
 		}
-		defer rows.Close()
 
-		var files []*model.File
-		layout := "2006-01-02 15:04:05"
-
-		for rows.Next() {
-			file := &model.File{}
-			var lastModified string
-			if err = rows.Scan(&file.Name, &file.IsDir, &file.Size,
-				&lastModified, &file.Path); err != nil {
-				fmt.Println("rows scan error:", err)
-				return
-			}
-			// parse datatime -> 2021-01-04 08:25:32.629566+08:00
-			last := strings.Split(lastModified, "+")[0]
-			lastModifiedDate, err := time.Parse(layout, last)
-			if err != nil {
-				fmt.Println(err)
-				return
-			}
-			file.LastModified = lastModifiedDate
-			files = append(files, file)
+		otmps := []string{
+			"./web/template/partial/breadcrumb.html",
+			"./web/template/partial/toolbar.html",
 		}
-		if err = rows.Err(); err != nil {
-			return
-		}
-		funcMap := template.FuncMap{
-			"cap": util.ConvertByteTo,
-		}
-		Render(w, r, "./templates/search.html", funcMap, files)
+		c.render(w, r, otmps, "./web/template/html/file/search.html", &TemplateData{
+			Files: files,
+		})
 	}
 }
 
-func Rebuild(dir string, db *sql.DB) http.HandlerFunc {
+func (f *FileHandler) Rebuild(c *Configuration) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("rebild")
 		// clear first
-		stmt, err := db.Prepare("DELETE FROM files;")
+		err := f.M.DeleteFileIndex()
 		if err != nil {
-			log.Println("delete prepare error:", err)
-			return
-		}
-		defer stmt.Close()
-
-		_, err = stmt.Exec()
-		if err != nil {
-			log.Println("delete exec error:", err)
+			log.Println("Clear index error:", err)
 			return
 		}
 
-		rebuild(db, dir)
+		rebuild(f.M.DB, f.Dir)
 		w.Write([]byte("刷新成功！"))
 	}
 }
+
 func rebuild(db *sql.DB, dir string) {
 	start := time.Now()
 

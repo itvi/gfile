@@ -3,7 +3,7 @@ package handler
 import (
 	"gfile/internal/model"
 	e "gfile/pkg/error"
-	"gfile/pkg/forms"
+	"gfile/pkg/form"
 	"log"
 	"net/http"
 	"strconv"
@@ -32,7 +32,7 @@ func (rl *RoleHandler) Index(c *Configuration) http.HandlerFunc {
 
 func (rl *RoleHandler) AddView(c *Configuration) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		form := forms.New(nil)
+		form := form.New(nil)
 		data := &TemplateData{Form: form}
 		c.render(w, r, nil, "./web/template/html/role/add.html", data)
 	}
@@ -46,7 +46,7 @@ func (rl *RoleHandler) Add(c *Configuration) http.HandlerFunc {
 		}
 
 		// if the form isn't valid, redisplay the template
-		form := forms.New(r.PostForm)
+		form := form.New(r.PostForm)
 		form.Required("name")
 		form.MaxLength("name", 20)
 		form.MaxLength("desc", 50)
@@ -106,7 +106,7 @@ func (rl *RoleHandler) EditView(c *Configuration) http.HandlerFunc {
 			return
 		}
 
-		form := forms.New(nil)
+		form := form.New(nil)
 		data := &TemplateData{
 			Form: form,
 			Role: role,

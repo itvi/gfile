@@ -2,7 +2,7 @@ package handler
 
 import (
 	"gfile/internal/model"
-	"gfile/pkg/forms"
+	"gfile/pkg/form"
 	"log"
 	"net/http"
 	"strconv"
@@ -26,7 +26,7 @@ func (a *CasbinHandler) Index(c *Configuration) http.HandlerFunc {
 
 func (a *CasbinHandler) AddView(c *Configuration) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		form := forms.New(nil)
+		form := form.New(nil)
 		data := &TemplateData{Form: form}
 		c.render(w, r, nil, "./web/template/html/casbin/add.html", data)
 	}
@@ -85,7 +85,7 @@ func (a *CasbinHandler) EditView(c *Configuration) http.HandlerFunc {
 			Obj: obj,
 			Act: act,
 		}
-		form := forms.New(nil)
+		form := form.New(nil)
 		data := &TemplateData{
 			Policy: policy,
 			Form:   form,

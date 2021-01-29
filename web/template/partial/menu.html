@@ -1,23 +1,24 @@
 {{define "menu"}}
-<nav class="navbar navbar-expand-lg navbar-light bg-white">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/"><i class="icon-home"></i>GFile</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <a class="navbar-brand" href="/"><i class="icon-home"></i>下载中心</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="authDpd" role="button" data-bs-toggle="dropdown" aria-expanded="false">AUTH</a>
+                <!-- <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="authDpd" role="button" data-bs-toggle="dropdown" aria-expanded="false">用户管理</a>
                     <ul class="dropdown-menu" aria-labelledby="authDpd">
-                        <li><a class="dropdown-item" href="/users">User</a></li>
-                        <li><a class="dropdown-item" href="/roles">Role</a></li>
+                        <li><a class="dropdown-item" href="/users">用户</a></li>
+                        <li><a class="dropdown-item" href="/roles">角色</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="/auth">Auth</a></li>
+                        <li><a class="dropdown-item" href="/auth">权限</a></li>
                     </ul>
-                </li>
+                </li> -->
             </ul>
             <form class="d-flex" action="/search" method="GET">
                 <input class="form-control me-2" type="search" placeholder="搜索..." aria-label="Search" name="q">
@@ -25,9 +26,10 @@
                     <i class="icon-search"></i>
                 </button>
             </form>
-            <ul class="navbar-nav">
+            <!-- <ul class="navbar-nav">
                 {{if .AuthenticatedUser}}
-                <li class="nav-item"><a class="nav-link" href="/users/{{.AuthenticatedUser.ID}}">{{.AuthenticatedUser.Name}}</a></li>
+                <li class="nav-item"><a class="nav-link"
+                        href="/users/{{.AuthenticatedUser.ID}}">{{.AuthenticatedUser.Name}}</a></li>
                 <li class="nav-item">
                     <form action="/users/logout" method="POST">
                         <button class="btn nav-link" type="submit">注销</button>
@@ -37,7 +39,7 @@
                 <li class="nav-item"><a href="/users/new" class="nav-link">注册</a></li>
                 <li class="nav-item"><a href="/users/login" class="nav-link">登录</a></li>
                 {{end}}
-            </ul>
+            </ul> -->
         </div>
     </div>
 </nav>

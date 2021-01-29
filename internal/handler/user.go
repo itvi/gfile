@@ -3,7 +3,7 @@ package handler
 import (
 	"gfile/internal/model"
 	e "gfile/pkg/error"
-	"gfile/pkg/forms"
+	"gfile/pkg/form"
 	"log"
 	"net/http"
 	"strconv"
@@ -32,7 +32,7 @@ func (u *UserHandler) Index(c *Configuration) http.HandlerFunc {
 
 func (u *UserHandler) AddView(c *Configuration) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		form := forms.New(nil)
+		form := form.New(nil)
 		data := &TemplateData{Form: form}
 		c.render(w, r, nil, "./web/template/html/user/add.html", data)
 	}
@@ -47,7 +47,7 @@ func (u *UserHandler) Add(c *Configuration) http.HandlerFunc {
 		}
 
 		// validate
-		form := forms.New(r.PostForm)
+		form := form.New(r.PostForm)
 		form.Required("sn", "password")
 		data := &TemplateData{Form: form}
 		page := "./web/template/html/user/add.html"
@@ -117,7 +117,7 @@ func (u *UserHandler) EditView(c *Configuration) http.HandlerFunc {
 			log.Println(err)
 			return
 		}
-		form := forms.New(nil)
+		form := form.New(nil)
 		data := &TemplateData{
 			Form: form,
 			User: user,
@@ -154,7 +154,7 @@ func (u *UserHandler) Edit(w http.ResponseWriter, r *http.Request) {
 
 func (u *UserHandler) LoginView(c *Configuration) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		form := forms.New(nil)
+		form := form.New(nil)
 		data := &TemplateData{Form: form}
 		c.render(w, r, nil, "./web/template/html/user/login.html", data)
 	}
@@ -168,7 +168,7 @@ func (u *UserHandler) Login(c *Configuration) http.HandlerFunc {
 			return
 		}
 
-		form := forms.New(r.PostForm)
+		form := form.New(r.PostForm)
 		sn := form.Get("sn")
 		password := form.Get("password")
 

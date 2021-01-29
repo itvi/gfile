@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"gfile/internal/model"
 	e "gfile/pkg/error"
-	"gfile/pkg/forms"
+	"gfile/pkg/form"
 	tmp "gfile/pkg/template"
 	"gfile/pkg/util"
 	"html/template"
@@ -22,7 +22,7 @@ import (
 type TemplateData struct {
 	Now               time.Time
 	AuthenticatedUser *model.User
-	Form              *forms.Form
+	Form              *form.Form
 	User              *model.User
 	Users             []*model.User
 	Role              *model.Role
@@ -30,9 +30,8 @@ type TemplateData struct {
 	RolesForUser      []string
 	Policy            *model.CasbinPolicy
 	Policies          []*model.CasbinPolicy
-	//======================================
-	File  *model.File
-	Files []*model.File
+	File              *model.File
+	Files             []*model.File
 }
 
 type Configuration struct {
@@ -41,8 +40,7 @@ type Configuration struct {
 	User    *UserHandler
 	Role    *RoleHandler
 	Casbin  *CasbinHandler
-	// ===========================
-	File *FileHandler
+	File    *FileHandler
 }
 
 type contextKey string
@@ -68,7 +66,7 @@ func Config() (*Configuration, *sql.DB) {
 		User:    &UserHandler{M: &model.UserModel{DB: db}},
 		Role:    &RoleHandler{M: &model.RoleModel{DB: db}},
 		Casbin:  &CasbinHandler{M: &model.CasbinModel{DB: db}},
-		File:    &FileHandler{Dir: *dir},
+		File:    &FileHandler{M: &model.FileModel{DB: db}, Dir: *dir},
 	}
 	return c, db
 }
@@ -181,8 +179,6 @@ func (c *Configuration) render(w http.ResponseWriter, r *http.Request,
 	layouts := []string{
 		"./web/template/layout.html",
 		"./web/template/partial/menu.html",
-		// "./web/template/partial/breadcrumb.html",
-		// "./web/template/partial/toolbar.html",
 	}
 	layouts = append(layouts, otherTemplates...)
 
@@ -219,6 +215,7 @@ func RenderPartial(w http.ResponseWriter, fileName, filePath string,
 		log.Println("Execute template error:", err)
 	}
 }
+
 func Render(w http.ResponseWriter, r *http.Request, name string,
 	funcMaps map[string]interface{}, d interface{}) {
 	baseFile := "layout"

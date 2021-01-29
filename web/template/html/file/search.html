@@ -1,4 +1,4 @@
-{{define "title"}} Index {{end}}
+{{define "title"}} Search {{end}}
 
 {{define "body"}}
 <div class="files-wrapper">
@@ -10,6 +10,7 @@
         <table class="table">
             <thead>
                 <th>名称</th>
+                <th>路径</th>
                 <th>大小</th>
                 <th>最后修改</th>
             </thead>
@@ -24,6 +25,7 @@
                         {{end}}
                         <span class="fname" data-isdir="{{.IsDir}}" data-path="{{.Path}}">{{.Name}}</span>
                     </td>
+                    <td>{{.Path}}</td>
                     <td>{{.Size|cap}}</td>
                     <td>{{.LastModified.Format "2006-01-02 15:04:05"}}</td>
                 </tr>

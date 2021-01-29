@@ -70,7 +70,7 @@ $(document).ready(function () {
     // show files from server.
     function showFiles(ret) {
         if ($(ret).find('tbody').text().trim().length == 0) {
-            $('#files tbody').html("空");
+            $('#files tbody').html("<span style='margin-left:1rem'>(空)</span>");
         } else {
             $('#files').html(ret);
         }
@@ -147,7 +147,7 @@ $(document).ready(function () {
         var term = $('input[name="q"]')[0].value;
         if (term.trim() == "") {
             e.preventDefault();
-            notify("请输入要搜索的文件名（支持模糊查询）");
+            notify("搜索","请输入要搜索的文件名（支持模糊查询）");
             return;
         }
     }); // end search
