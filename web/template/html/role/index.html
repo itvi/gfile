@@ -1,0 +1,40 @@
+{{define "title"}}角色{{end}}
+
+{{define "body"}}
+<div class="container">
+    <h3>角色</h3>
+    <hr/>
+    <div class="mb-3">
+        {{template "toolbar_crud"}}
+    </div>
+
+    {{if .Roles}}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>名称</th>
+                <th>描述</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{range .Roles}}
+            <tr>
+                <td>{{.ID}}</td>
+                <td>{{.Name}}</td>
+                <td>{{.Description}}</td>
+            </tr>
+            {{end}}
+        </tbody>
+    </table>
+    {{else}}
+    <div class="card">
+        <div class="card-body">空</div>
+    </div>
+    {{end}}
+</div>
+{{end}}
+
+{{define "script"}}
+<script src="/js/role/index.js"></script>
+{{end}}

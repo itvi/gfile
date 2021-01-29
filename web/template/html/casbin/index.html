@@ -1,0 +1,38 @@
+{{define "title"}}权限{{end}}
+
+{{define "body"}}
+<div class="container">
+    <h3>权限</h3>
+    <hr />
+    <div class="mb-3">{{template "toolbar_crud"}}</div>
+
+    {{if .Policies}}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Sub</th>
+                <th>Obj</th>
+                <th>Act</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{range .Policies}}
+            <tr>
+                <td>{{.Sub}}</td>
+                <td>{{.Obj}}</td>
+                <td>{{.Act}}</td>
+            </tr>
+            {{end}}
+        </tbody>
+    </table>
+    {{else}}
+    <div class="card">
+        <div class="card-body">空</div>
+    </div>
+    {{end}}
+</div>
+{{end}}
+
+{{define "script"}}
+<script src="/js/auth/index.js"></script>
+{{end}}

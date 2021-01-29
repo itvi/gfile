@@ -1,0 +1,37 @@
+{{define "title"}}编辑权限{{end}}
+
+{{define "body"}}
+<div class="container">
+    <h4>编辑权限</h4>
+    <hr>
+    <div class="form-floating mb-3">
+        <input id="sub" name="sub" type="text" class="form-control" value="{{.Policy.Sub}}" placeholder="sub">
+        <label for="sub">用户/角色</label>
+        {{with .Form.Errors.Get "sub"}}
+        <span class="invalidate">{{.}}</span>
+        {{end}}
+    </div>
+
+    <div class="form-floating mb-3">
+        <input id="obj" name="obj" type="text" class="form-control" value="{{.Policy.Obj}}" placeholder="obj">
+        <label for="obj">资源</label>
+        {{with .Form.Errors.Get "obj"}}
+        <span class="invalidate">{{.}}</span>
+        {{end}}
+    </div>
+
+    <div class="form-floating mb-3">
+        <input id="act" name="act" type="text" class="form-control" value="{{.Policy.Act}}" placeholder="act">
+        <label for="act">操作</label>
+        {{with .Form.Errors.Get "act"}}
+        <span class="invalidate">{{.}}</span>
+        {{end}}
+    </div>
+
+    <button onclick="edit()" class="btn btn-primary">保存</button>
+</div>
+{{end}}
+
+{{define "script"}}
+<script src="/js/auth/edit.js"></script>
+{{end}}

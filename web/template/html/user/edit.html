@@ -1,0 +1,54 @@
+{{define "title"}}编辑用户{{end}}
+
+{{define "body"}}
+<div class="container">
+    <h4>编辑用户</h4>
+    <hr>
+    <div class="row mb-3">
+        <label for="sn" class="col-md-1 col-form-label">编号</label>
+        <div class="col-md-5">
+            <input id="sn" name="sn" type="text" class="form-control" value="{{.User.SN}}" readonly>
+            {{with .Form.Errors.Get "sn"}}
+            <label class="invalidate">{{.}}</label>
+            {{end}}
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label for="name" class="col-md-1 col-form-label">姓名</label>
+        <div class="col-md-5">
+            <input id="name" name="name" type="text" class="form-control" value="{{.User.Name}}">
+            {{with .Form.Errors.Get "name"}}
+            <span class="invalidate">{{.}}</span>
+            {{end}}
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label class="col-md-1 col-form-label">邮箱</label>
+        <div class="col-md-5">
+            <input id="email" name="email" type="email" class="form-control" value="{{.User.Email}}">
+        </div>
+        {{with .Form.Errors.Get "email"}}
+        <span class="invalidate">{{.}}</span>
+        {{end}}
+    </div>
+
+    <div class="row mb-3">
+        <label class="col-md-1 col-form-label">密码</label>
+        <div class="col-md-5">
+            <input id="password" name="password" type="password" class="form-control" required
+                   value="{{.User.HashedPassword}}" />
+            {{with .Form.Errors.Get "password"}}
+            <span class="invalidate">{{.}}</span>
+            {{end}}
+        </div>
+    </div>
+
+    <button onclick="edit({{.User.ID}})" class="btn btn-primary offset-md-1">保存</button>
+</div>
+{{end}}
+
+{{define "script"}}
+<script src="/js/user/edit.js"></script>
+{{end}}

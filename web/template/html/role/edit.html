@@ -1,0 +1,33 @@
+{{define "title"}} 编辑角色{{end}}
+
+{{define "body"}}
+<div class="container">
+    <h4>编辑角色</h4>
+    <hr>
+    <div class="row mb-3">
+        <label for="name" class="col-md-1 col-form-label">名称</label>
+        <div class="col-md-5">
+            <input id="name" name="name" type="text" class="form-control" value="{{.Role.Name}}">
+            {{with .Form.Errors.Get "name"}}
+            <span class="invalidate">{{.}}</span>
+            {{end}}
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label class="col-md-1 col-form-label">描述</label>
+        <div class="col-md-5">
+            <input id="desc" name="desc" type="text" class="form-control" value="{{.Role.Description}}">
+        </div>
+        {{with .Form.Errors.Get "desc"}}
+        <span class="invalidate">{{.}}</span>
+        {{end}}
+    </div>
+
+    <button onclick="edit({{.Role.ID}})" class="btn btn-primary offset-md-1">保存</button>
+</div>
+{{end}}
+
+{{define "script"}}
+<script src="/js/role/edit.js"></script>
+{{end}}

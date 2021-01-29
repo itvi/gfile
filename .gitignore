@@ -1,5 +1,4 @@
-go.sum
-/.log/
-go.sum
+*.exe
 *.db
-zip/
+.log/
+.vscode/

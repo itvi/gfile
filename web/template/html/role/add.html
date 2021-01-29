@@ -1,0 +1,33 @@
+{{define "title"}} 新角色{{end}}
+
+{{define "body"}}
+<div class="container">
+    <h4>创建新角色</h4>
+    <hr>
+    <form action="/roles" method="POST">
+        {{with .Form}}
+        <div class="row mb-3">
+            <label for="name" class="col-md-1 col-form-label">名称</label>
+            <div class="col-md-5">
+                <input id="name" name="name" type="text" class="form-control" value='{{.Get "name"}}'>
+                {{with .Errors.Get "name"}}
+                <span class="invalidate">{{.}}</span>
+                {{end}}
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-md-1 col-form-label">描述</label>
+            <div class="col-md-5">
+                <input name="desc" type="text" class="form-control" value='{{.Get "desc"}}'>
+            </div>
+            {{with .Errors.Get "desc"}}
+            <span class="invalidate">{{.}}</span>
+            {{end}}
+        </div>
+
+        <input type="submit" value="保存" class="btn btn-primary offset-md-1" />
+        {{end}}
+    </form>
+</div>
+{{end}}

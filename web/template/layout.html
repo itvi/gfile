@@ -1,0 +1,30 @@
+{{define "layout"}}
+<!doctype html>
+<html>
+
+<head>
+    <title>{{template "title" .}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/css/animate.min.css" />
+    <link rel="stylesheet" href="/static/css/icomoon.css">
+    <link rel="stylesheet" href="/static/css/site.css" />
+    {{block "css" .}}{{end}}
+</head>
+
+<body class="container">
+    {{template "menu" .}}
+    <!-- how to put toolbar/breadcrumb here? -->
+    <!-- content -->
+    {{template "body" .}}
+
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/jquery-3.5.1.min.js"></script>
+    <script src="/static/js/site.js"></script>
+    {{block "script" .}}{{end}}
+</body>
+
+</html>
+{{end}}

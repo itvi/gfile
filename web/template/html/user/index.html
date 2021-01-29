@@ -1,0 +1,42 @@
+{{define "title"}}用户{{end}}
+
+{{define "body"}}
+<div class="container">
+    <h3>用户</h3>
+    <hr />
+    <div class="mb-3">
+        {{template "toolbar_crud"}}
+        <button id="addRoles" class="btn btn-primary"><i class="icon-group_add"></i>分配角色</button>
+    </div>
+    {{ if .}}
+    <table class="table table-content">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>编号</th>
+                <th>姓名</th>
+                <th>邮箱</th>
+            </tr>
+        </thead>
+        {{range .Users}}
+        <tr>
+            <td>{{.ID}}</td>
+            <td>{{.SN}}</td>
+            <td>{{.Name}}</td>
+            <td>{{.Email}}</td>
+        </tr>
+        {{end}}
+    </table>
+    {{else}}
+    <div class="card">
+        <div class="card-body">
+            空
+        </div>
+    </div>
+    {{end}}
+</div>
+{{end}}
+
+{{define "script"}}
+<script src="/js/user/index.js"></script>
+{{end}}

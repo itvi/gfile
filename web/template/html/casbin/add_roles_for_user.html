@@ -1,0 +1,30 @@
+{{define "title"}}分配角色{{end}}
+
+{{define "body"}}
+<div class="container">
+    <h4>分配角色</h4>
+    <hr>
+    <form method="POST" action="/auth/roles4user/{{.User.ID}}">
+        {{$user_roles:=.RolesForUser}}
+        <div class="card border-primary mb-3">
+            <div class="card-header">
+                <span class="fw-bolder">姓名：{{.User.Name}}</span>
+                <span class="ms-3">编号：{{.User.SN}}</span>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">角色:</h5>
+                {{range .Roles}}
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="roles" value="{{.Name}}" id="{{.Name}}"
+                        {{ownedRoles .Name $user_roles|safe}} />
+                    <label for="{{.Name}}" class="form-check-label">{{.Name}}</label>
+                    <label for="{{.Name}}" class="form-check-label">({{.Description}})</label>
+                </div>
+                {{end}}
+            </div>
+        </div>
+
+        <input type="submit" value="保存" class="btn btn-primary">
+    </form>
+</div>
+{{end}}

@@ -1,0 +1,59 @@
+{{define "title"}}新用户{{end}}
+
+{{define "body"}}
+<div class="container">
+    <h4>注册新用户</h4>
+    <hr>
+    <form action="/users" method="POST">
+        {{with .Form}}
+        <div class="row mb-3">
+            <label for="sn" class="col-md-1 col-form-label">编号</label>
+            <div class="col-md-5">
+                <input id="sn" name="sn" type="text" class="form-control" value='{{.Get "sn"}}' required maxlength="8">
+                {{with .Errors.Get "sn"}}
+                <label class="invalidate">{{.}}</label>
+                {{end}}
+            </div>
+            <div class="col-md-2" style="padding:0">
+                <label class="col-form-label">(必填项)</label>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label for="name" class="col-md-1 col-form-label">姓名</label>
+            <div class="col-md-5">
+                <input id="name" name="name" type="text" class="form-control" value='{{.Get "name"}}'>
+                {{with .Errors.Get "name"}}
+                <span class="invalidate">{{.}}</span>
+                {{end}}
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-md-1 col-form-label">邮箱</label>
+            <div class="col-md-5">
+                <input name="email" type="email" class="form-control" value='{{.Get "email"}}'>
+            </div>
+            {{with .Errors.Get "email"}}
+            <span class="invalidate">{{.}}</span>
+            {{end}}
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-md-1 col-form-label">密码</label>
+            <div class="col-md-5">
+                <input name="password" type="password" class="form-control" required />
+                {{with .Errors.Get "password"}}
+                <span class="invalidate">{{.}}</span>
+                {{end}}
+            </div>
+            <div class="col-md-2" style="padding:0">
+                <label class="col-form-label">(必填项)</label>
+            </div>
+        </div>
+
+        <input type="submit" value="注册" class="btn btn-primary offset-md-1" />
+        {{end}}
+    </form>
+</div>
+{{end}}
