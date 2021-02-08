@@ -9,11 +9,13 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/karrick/godirwalk"
+	"github.com/radovskyb/watcher"
 )
 
 type FileHandler struct {
@@ -110,9 +112,8 @@ func (f *FileHandler) Search(c *Configuration) http.HandlerFunc {
 
 func (f *FileHandler) Rebuild(c *Configuration) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("rebild")
 		// clear first
-		err := f.M.DeleteFileIndex()
+		err := f.M.ClearFileIndexes()
 		if err != nil {
 			log.Println("Clear index error:", err)
 			return
@@ -183,4 +184,77 @@ func rebuild(db *sql.DB, dir string) {
 
 	tx.Commit()
 	fmt.Printf("Rebuild: %d items, Spend: %s\n", count, time.Since(start))
+}
+
+func (f *FileHandler) Watchdog(dir string) {
+
+	w := watcher.New()
+	w.FilterOps(watcher.Create, watcher.Remove, watcher.Rename, watcher.Move)
+
+	go func() {
+		var i int
+		for {
+			select {
+			case event := <-w.Event:
+				//fmt.Println(event)
+
+				switch event.Op {
+
+				case watcher.Remove:
+					file := event.Path[len(dir):]
+					log.Println("Will remove:", file)
+					// delete from database:
+					if err := f.M.DeleteIndex(file); err != nil {
+						log.Println("Delete index error:", err)
+					}
+
+				case watcher.Create:
+					i++
+					fmt.Println("Create.", i)
+
+					file := &model.File{
+						Name:  event.Name(),
+						IsDir: event.IsDir(),
+						Size:  event.Size(),
+						Path:  event.Path[len(dir):],
+					}
+					//fmt.Printf("File will create: %v\n", file)
+					// add to database
+					if err := f.M.CreateIndex(file); err != nil {
+						log.Println("Add index error:", err)
+					}
+				case watcher.Rename:
+					oldName := filepath.Base(event.OldPath)
+					newName := filepath.Base(event.Path)
+					oldFile := &model.File{
+						Name: oldName,
+						Path: event.OldPath[len(dir):],
+					}
+					newFile := &model.File{
+						Name: newName,
+						Path: event.Path[len(dir):],
+					}
+					//fmt.Printf("old %v, new %v", oldFile, newFile)
+					if err := f.M.UpdateIndex(oldFile, newFile); err != nil {
+						log.Println("Rename index error:", err)
+					}
+				default:
+					fmt.Println("default")
+				}
+
+			case err := <-w.Error:
+				log.Println(err)
+			case <-w.Closed:
+				return
+			}
+		}
+	}()
+	fmt.Print("O")
+
+	if err := w.AddRecursive(dir); err != nil {
+		log.Fatalln(err)
+	}
+	if err := w.Start(time.Millisecond * 100); err != nil {
+		log.Fatalln(err)
+	}
 }

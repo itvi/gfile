@@ -12,8 +12,11 @@ func main() {
 	var DIR = flag.String("d", ".", "User's directory")
 	flag.Parse()
 
+	// configuration
 	config, db := handler.Config(*DIR)
 	defer db.Close()
+
+	go config.File.Watchdog(*DIR)
 
 	server := &http.Server{
 		Addr:    *PORT,

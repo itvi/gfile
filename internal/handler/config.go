@@ -239,3 +239,104 @@ func Render(w http.ResponseWriter, r *http.Request, name string,
 		w.Write([]byte(err.Error()))
 	}
 }
+
+// // watcher(I want to batch delete/add to database. How to pass channel's item to a slice?)
+// func monitor(dir string) {
+// 	var files []string
+
+// 	createFiles := []model.File{}
+
+// 	go func() {
+// 		w := watcher.New()
+// 		w.FilterOps(watcher.Create, watcher.Remove, watcher.Rename, watcher.Move)
+
+// 		go func() {
+// 			var i int
+// 			for {
+// 				select {
+// 				case event := <-w.Event:
+// 					//fmt.Println(event)
+
+// 					removeChan := make(chan string)
+// 					createChan := make(chan model.File)
+// 					switch event.Op {
+// 					case watcher.Remove:
+// 						file := event.Path[len(dir):]
+// 						//fmt.Println("File:", file)
+
+// 						go func(file string) {
+// 							removeChan <- file
+// 							close(removeChan)
+// 						}(file)
+
+// 						for n := range removeChan {
+// 							files = append(files, n)
+// 						}
+// 						// delete from database:
+// 						fmt.Printf("del slice count:%d, %v\n", len(files), files)
+// 						fmt.Println("delete from database")
+// 						//config.File.M.DeleteIndexes(files)
+// 					case watcher.Create:
+// 						i++
+// 						fmt.Println("Create.", i)
+
+// 						file := &model.File{
+// 							Name: event.Name(),
+// 							Size: event.Size(),
+// 							Path: event.Path[len(dir):],
+// 						}
+
+// 						go func(file model.File) {
+// 							createChan <- file
+// 							close(createChan)
+// 						}(*file)
+
+// 						for f := range createChan {
+// 							createFiles = append(createFiles, f)
+// 						}
+// 						fmt.Println("create:", createFiles)
+// 						// add to database
+
+// 					default:
+// 						fmt.Println("default")
+// 					}
+// 					// do something from database
+
+// 				case err := <-w.Error:
+// 					log.Println(err)
+// 				case <-w.Closed:
+// 					return
+// 				}
+// 			}
+// 		}()
+// 		fmt.Print("O")
+
+// 		if err := w.AddRecursive(dir); err != nil {
+// 			log.Fatalln(err)
+// 		}
+// 		if err := w.Start(time.Millisecond * 100); err != nil {
+// 			log.Fatalln(err)
+// 		}
+// 	}()
+// }
+
+// func fromChannel(file <-chan string) []string {
+// 	var results []string
+// 	for {
+// 		select {
+// 		case str := <-file:
+// 			results = append(results, str)
+// 			if len(results) == 3 {
+// 				fmt.Println("Got all results")
+// 				return results
+// 			}
+// 		}
+// 	}
+// }
+
+// func putInChannel(file string, channel chan<- string) {
+// 	channel <- file
+// }
+
+// copy finished
+// https://github.com/radovskyb/watcher/issues/46

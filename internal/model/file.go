@@ -52,7 +52,8 @@ func GetFiles(dir, absolutePath string) []*File {
 	return myFiles
 }
 
-func (m *FileModel) DeleteFileIndex() error {
+// ClearFileIndexes delete all files index
+func (m *FileModel) ClearFileIndexes() error {
 	q := `DELETE FROM files;`
 	stmt, err := m.DB.Prepare(q)
 	if err != nil {
@@ -62,6 +63,61 @@ func (m *FileModel) DeleteFileIndex() error {
 
 	_, err = stmt.Exec()
 	return err
+}
+
+func (m *FileModel) CreateIndex(f *File) error {
+	q := `INSERT INTO files(name,isdir,size,last_modified,path) VALUES(?,?,?,?,?);`
+	stmt, err := m.DB.Prepare(q)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(f.Name, f.IsDir, f.Size, f.LastModified, f.Path)
+	if err != nil {
+		log.Println("insert index error:", err)
+	}
+	return err
+}
+
+func (m *FileModel) DeleteIndex(path string) error {
+	q := "DELETE FROM files WHERE path=?" // IN(" + pathString + ")"
+	stmt, err := m.DB.Prepare(q)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(path)
+	return err
+}
+
+func (m *FileModel) DeleteIndexes(paths []string) error {
+	// convert to string
+	str := strings.Join(paths, `','`) // \.git','\.git\config
+	pathString := `'` + str + `'`
+	//q := "DELETE FROM files WHERE path IN ('\\.git','\\.git\\config')"
+	q := "DELETE FROM files WHERE path IN(" + pathString + ")"
+	stmt, err := m.DB.Prepare(q)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec()
+	return err
+}
+
+func (m *FileModel) UpdateIndex(old, new *File) error {
+	q := "UPDATE files SET name=?,path=? WHERE path=?"
+	stmt, err := m.DB.Prepare(q)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(new.Name, new.Path, old.Path)
+	return nil
 }
 
 func (m *FileModel) Search(q string) ([]*File, error) {

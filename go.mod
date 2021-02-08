@@ -12,6 +12,7 @@ require (
 	github.com/karrick/godirwalk v1.16.1
 	github.com/lib/pq v1.8.0 // indirect
 	github.com/mattn/go-sqlite3 v1.14.6
+	github.com/radovskyb/watcher v1.0.7
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
 	golang.org/x/text v0.3.0
 )
