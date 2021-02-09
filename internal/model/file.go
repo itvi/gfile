@@ -155,3 +155,34 @@ func (m *FileModel) Search(q string) ([]*File, error) {
 	}
 	return files, nil
 }
+
+func (m *FileModel) FileStat(term string) map[string]int {
+	q := `select isdir,count(*)number from files 
+		  WHERE name LIKE '%` + term + `%'  group by isdir;`
+	rows, err := m.DB.Query(q)
+	if err != nil {
+		return nil
+	}
+	defer rows.Close()
+
+	type stat struct {
+		isdir  string
+		number int
+	}
+
+	var result = make(map[string]int)
+	for rows.Next() {
+		s := &stat{}
+		if err = rows.Scan(&s.isdir, &s.number); err != nil {
+			fmt.Println("rows scan error:", err)
+			return nil
+		}
+		if s.isdir == "false" {
+			result["file"] = s.number
+		}
+		if s.isdir == "true" {
+			result["dir"] = s.number
+		}
+	}
+	return result
+}

@@ -31,6 +31,7 @@ type TemplateData struct {
 	Policies          []*model.CasbinPolicy
 	File              *model.File
 	Files             []*model.File
+	FileStat          map[string]int
 }
 
 type Configuration struct {

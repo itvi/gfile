@@ -7,36 +7,37 @@
         {{template "toolbar"}}
     </div>
     <div id="files">
-        <table class="table">
-            <thead>
-                <th>名称</th>
-                <th>路径</th>
-                <th>大小</th>
-                <th>最后修改</th>
-            </thead>
-            <tbody>
-                {{range .Files}}
-                <tr>
-                    <td>
-                        {{if .IsDir}}
-                        <i class="icon-folder-o"></i>
-                        {{else}}
-                        <i class="icon-file-o"></i>
-                        {{end}}
-                        <span class="fname" data-isdir="{{.IsDir}}" data-path="{{.Path}}">{{.Name}}</span>
-                    </td>
-                    <td>{{.Path}}</td>
-                    <td>{{.Size|cap}}</td>
-                    <td>{{.LastModified.Format "2006-01-02 15:04:05"}}</td>
-                </tr>
-                {{end}}
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="4">{{len .Files}}</td>
-                </tr>
-            </tfoot>
-        </table>
+        <div class="filelist">
+            <table class="table">
+                <thead>
+                    <th>名称</th>
+                    <th>路径</th>
+                    <th>大小</th>
+                    <th>最后修改</th>
+                </thead>
+                <tbody>
+                    {{range .Files}}
+                    <tr>
+                        <td>
+                            {{if .IsDir}}
+                            <i class="icon-folder-o"></i>
+                            {{else}}
+                            <i class="icon-file-o"></i>
+                            {{end}}
+                            <span class="fname" data-isdir="{{.IsDir}}" data-path="{{.Path}}">{{.Name}}</span>
+                        </td>
+                        <td>{{.Path}}</td>
+                        <td>{{.Size|cap}}</td>
+                        <td>{{.LastModified.Format "2006-01-02 15:04:05"}}</td>
+                    </tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </div>
+        <div class="filestat">
+            <span title="目录"><i class="icon-folder-o"></i> {{index .FileStat "dir"}}</span>
+            <span title="文件"><i class="icon-file-o"></i> {{index .FileStat "file"}}</span>
+        </div>
     </div>
 </div>
 {{end}}

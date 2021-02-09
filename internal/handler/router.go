@@ -53,6 +53,7 @@ func (c *Configuration) Route() http.Handler {
 	r.Get("/dl", m1.ThenFunc(c.File.Download(c)))
 	r.Get("/rebuild", m1.ThenFunc(c.File.Rebuild(c)))
 	r.Get("/search", m1.ThenFunc(c.File.Search(c)))
+	r.Get("/getDirContent", m1.ThenFunc(c.File.getDirContent()))
 
 	return m0.Then(r)
 }

@@ -26,29 +26,56 @@ type FileHandler struct {
 // file list
 func (f *FileHandler) Index(c *Configuration) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		method := r.URL.Query().Get("method")
-		path := r.URL.Query().Get("path")
-		fmt.Println("method:", method)
+		name := r.URL.Query().Get("name")
 
-		if method == "" {
-			files := model.GetFiles(f.Dir, f.Dir)
-			otmps := []string{
-				"./web/template/partial/breadcrumb.html",
-				"./web/template/partial/toolbar.html",
-			}
-			c.render(w, r, otmps, "./web/template/html/file/index.html", &TemplateData{
-				Files: files,
-			})
-		} else {
-			files := model.GetFiles(f.Dir, f.Dir+path)
-			fileName := "list.html"
-			filePath := "./web/template/partial/list.html"
+		// file stat
+		stat := f.M.FileStat(name)
+		fmt.Println(stat)
 
-			funcMap := template.FuncMap{
-				"cap": util.ConvertByteTo,
-			}
-			RenderPartial(w, fileName, filePath, funcMap, files)
+		//if method == "" {
+		files := model.GetFiles(f.Dir, f.Dir)
+		otmps := []string{
+			"./web/template/partial/breadcrumb.html",
+			"./web/template/partial/toolbar.html",
 		}
+		c.render(w, r, otmps, "./web/template/html/file/index.html", &TemplateData{
+			Files:    files,
+			FileStat: stat,
+		})
+	}
+}
+
+func (f *FileHandler) getDirContent() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		path := r.URL.Query().Get("path")
+		files := model.GetFiles(f.Dir, f.Dir+path)
+		var dirNum, fileNum int
+		for _, file := range files {
+			if file.IsDir {
+				dirNum++
+			}
+			if !file.IsDir {
+				fileNum++
+			}
+		}
+		var stat = make(map[string]int)
+		stat["dir"] = dirNum
+		stat["file"] = fileNum
+
+		fileName := "list.html"
+		filePath := "./web/template/partial/list.html"
+
+		funcMap := template.FuncMap{
+			"cap": util.ConvertByteTo,
+		}
+
+		data := struct {
+			File     []*model.File
+			FileStat map[string]int
+		}{File: files, FileStat: stat}
+
+		fmt.Printf("%T", data)
+		RenderPartial(w, fileName, filePath, funcMap, data)
 	}
 }
 
@@ -100,12 +127,16 @@ func (f *FileHandler) Search(c *Configuration) http.HandlerFunc {
 			return
 		}
 
+		// file stat
+		stat := f.M.FileStat(q)
+
 		otmps := []string{
 			"./web/template/partial/breadcrumb.html",
 			"./web/template/partial/toolbar.html",
 		}
 		c.render(w, r, otmps, "./web/template/html/file/search.html", &TemplateData{
-			Files: files,
+			Files:    files,
+			FileStat: stat,
 		})
 	}
 }

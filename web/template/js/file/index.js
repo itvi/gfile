@@ -25,7 +25,7 @@ $(document).ready(function () {
 
         if (isdir == "true") {
             $.ajax({
-                url: '/',
+                url: '/getDirContent',
                 type: 'GET',
                 data: {
                     isdir: isdir,
@@ -51,7 +51,7 @@ $(document).ready(function () {
         $(this).parent().nextAll().remove();
 
         $.ajax({
-            url: '/',
+            url: '/getDirContent',
             type: 'GET',
             data: {
                 name: name,
