@@ -9,7 +9,7 @@ import (
 
 func main() {
 	var PORT = flag.String("p", ":8000", "TCP address port")
-	var DIR = flag.String("d", "G:/test", "User's directory")
+	var DIR = flag.String("d", ".", "User's directory")
 	flag.Parse()
 
 	// configuration

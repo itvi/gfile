@@ -17,15 +17,13 @@ const {
     Toast
 } = bootstrap;
 
-function toast(title, body) {
+function toast(title, body, duration) {
     var htmlMarkup = `
-  <div aria-atomic="true" aria-live="assertive" class="toast bg-primary text-white position-absolute end-0 top-0 m-3" role="alert" id="myAlert">
-      <div class="toast-header">
+  <div aria-atomic="true" aria-live="assertive" class="toast position-absolute end-0 top-0 m-3" role="alert" id="myAlert" data-bs-delay="` + duration + `">
+      <div class="toast-header bg-primary text-white">
             <strong class="me-auto">` + title + `</strong>
             <small></small>
-            <button aria-label="Close" class="btn-close" 
-                    data-bs-dismiss="toast" type="button">
-            </button>
+            <button aria-label="Close" class="btn-close btn-close-white" data-bs-dismiss="toast" type="button"></button>
       </div>
       <div class="toast-body">` + body + ` </div>
   </div>
@@ -37,8 +35,8 @@ function toast(title, body) {
     return template.content.firstChild
 }
 
-function notify(title, body) {
-    var toastEl = toast(title, body);
+function notify(title, body, duration = 5000) {
+    var toastEl = toast(title, body, duration);
     document.body.appendChild(toastEl)
     const myToast = new Toast(toastEl);
     myToast.show();
@@ -79,4 +77,15 @@ function delete_confirm() {
         return false;
     }
     return true;
+}
+
+// copy to clipboard
+function copy(text) {
+    var input = document.createElement('input');
+    input.setAttribute('value', text);
+    document.body.appendChild(input);
+    input.select();
+    var result = document.execCommand('copy');
+    document.body.removeChild(input);
+    return result;
 }

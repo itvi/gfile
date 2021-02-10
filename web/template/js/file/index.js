@@ -88,7 +88,7 @@ $(document).ready(function () {
         // selected or not
         var selections = $('#files .selected').length;
         if (selections == 0) {
-            notify("下载","请选择文件");
+            notify("下载", "请选择文件");
             console.log("please select one or more rows");
             return;
         }
@@ -120,6 +120,54 @@ $(document).ready(function () {
         }
     });
 
+    // share links
+    $('#share').click(function () {
+        var selections = $('#files .selected').length;
+        if (selections == 0 || selections > 1) {
+            notify("分享", "请选择1个文件");
+            console.log("please select one or more rows");
+            return;
+        }
+        // share links
+        var dlink;
+
+        var ele = $('#files .selected');
+        var file = $(ele).find('span');
+        var isdir = file.attr('data-isdir');
+        var name = file.text();
+        var path = file.attr('data-path');
+
+        // directory will be zipped
+        if (isdir == "true") {
+            if (path == "/") {
+                path = "";
+            }
+            $.ajax({
+                url: '/zip',
+                type: 'GET',
+                data: {
+                    isdir: isdir,
+                    path: path,
+                    name: name
+                },
+                success: function (ret) {
+                    var r = encodeURIComponent(ret);
+                    dlink = window.location.host + "/dl?name=" + r + "&isdir=" + isdir;
+                    copy(dlink);
+                    notify("已复制到剪贴板", dlink, 20000);
+                },
+                error: function (x, s, e) {
+                    console.log(x, s, e);
+                }
+            });
+            // copy(window.location.host + dlink);
+        } else {
+            dlink = window.location.host + "/dl?name=" + name + "&path=" + path;
+            copy(dlink);
+            notify("已复制到剪贴板", dlink, 20000);
+        }
+    });
+
     // return file path for download
     function zipDir(isdir, path, name) {
         $.ajax({
@@ -147,7 +195,7 @@ $(document).ready(function () {
         var term = $('input[name="q"]')[0].value;
         if (term.trim() == "") {
             e.preventDefault();
-            notify("搜索","请输入要搜索的文件名（支持模糊查询）");
+            notify("搜索", "请输入要搜索的文件名（支持模糊查询）");
             return;
         }
     }); // end search
