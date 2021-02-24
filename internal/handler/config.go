@@ -12,6 +12,8 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/golangcollege/sessions"
@@ -47,9 +49,21 @@ type contextKey string
 
 var contextKeyUser = contextKey("user")
 
+func execPath() string {
+	path, err := os.Executable()
+	if err != nil {
+		log.Fatal(err)
+		return ""
+	}
+	dir, _ := filepath.Split(path)
+	return dir
+}
+
+var p = execPath()
+
 func Config(dir string) (*Configuration, *sql.DB) {
 	// database
-	db, err := openDB("./db.db")
+	db, err := openDB(p + "db.db")
 	if err != nil {
 		err = fmt.Errorf("open db error: %w -> from open db", err)
 		log.Panic(err)
@@ -176,8 +190,8 @@ func (c *Configuration) render(w http.ResponseWriter, r *http.Request,
 	otherTemplates []string, templateName string, data *TemplateData) {
 
 	layouts := []string{
-		"./web/template/layout.html",
-		"./web/template/partial/menu.html",
+		p + "web/template/layout.html",
+		p + "web/template/partial/menu.html",
 	}
 	layouts = append(layouts, otherTemplates...)
 
@@ -219,10 +233,10 @@ func Render(w http.ResponseWriter, r *http.Request, name string,
 	funcMaps map[string]interface{}, d interface{}) {
 	baseFile := "layout"
 	tmpls := []string{
-		"./web/template/layout.html",
-		"./web/template/partial/menu.html",
-		"./web/template/partial/breadcrumb.html",
-		"./web/template/partial/toolbar.html",
+		p + "web/template/layout.html",
+		p + "web/template/partial/menu.html",
+		p + "web/template/partial/breadcrumb.html",
+		p + "web/template/partial/toolbar.html",
 	}
 	tmpls = append(tmpls, name)
 

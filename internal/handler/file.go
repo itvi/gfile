@@ -35,10 +35,10 @@ func (f *FileHandler) Index(c *Configuration) http.HandlerFunc {
 		//if method == "" {
 		files := model.GetFiles(f.Dir, f.Dir)
 		otmps := []string{
-			"./web/template/partial/breadcrumb.html",
-			"./web/template/partial/toolbar.html",
+			p + "web/template/partial/breadcrumb.html",
+			p + "web/template/partial/toolbar.html",
 		}
-		c.render(w, r, otmps, "./web/template/html/file/index.html", &TemplateData{
+		c.render(w, r, otmps, p+"web/template/html/file/index.html", &TemplateData{
 			Files:    files,
 			FileStat: stat,
 		})
@@ -63,7 +63,7 @@ func (f *FileHandler) getDirContent() http.HandlerFunc {
 		stat["file"] = fileNum
 
 		fileName := "list.html"
-		filePath := "./web/template/partial/list.html"
+		filePath := p + "web/template/partial/list.html"
 
 		funcMap := template.FuncMap{
 			"cap": util.ConvertByteTo,
@@ -104,8 +104,9 @@ func (f *FileHandler) Zip(c *Configuration) http.HandlerFunc {
 		name := r.URL.Query().Get("name")
 		path := r.URL.Query().Get("path")
 
-		pathToZip := f.Dir + path
-		zipName := "./zip/" + name + ".zip"
+		pathToZip := p + path
+		zipName := p + "zip/" + name + ".zip"
+		fmt.Printf("pathtozip: %s, zipname:%s\n", pathToZip, zipName)
 
 		err := util.RecursiveZip(pathToZip, zipName)
 		if err != nil {
@@ -131,10 +132,10 @@ func (f *FileHandler) Search(c *Configuration) http.HandlerFunc {
 		stat := f.M.FileStat(q)
 
 		otmps := []string{
-			"./web/template/partial/breadcrumb.html",
-			"./web/template/partial/toolbar.html",
+			p + "web/template/partial/breadcrumb.html",
+			p + "web/template/partial/toolbar.html",
 		}
-		c.render(w, r, otmps, "./web/template/html/file/search.html", &TemplateData{
+		c.render(w, r, otmps, p+"web/template/html/file/search.html", &TemplateData{
 			Files:    files,
 			FileStat: stat,
 		})
@@ -280,7 +281,7 @@ func (f *FileHandler) Watchdog(dir string) {
 			}
 		}
 	}()
-	fmt.Print("O")
+	// fmt.Print("O")
 
 	if err := w.AddRecursive(dir); err != nil {
 		log.Fatalln(err)

@@ -9,6 +9,7 @@ require (
 	github.com/go-sql-driver/mysql v1.5.0 // indirect
 	github.com/golangcollege/sessions v1.2.0
 	github.com/justinas/alice v1.2.0
+	github.com/kardianos/service v1.2.0
 	github.com/karrick/godirwalk v1.16.1
 	github.com/lib/pq v1.8.0 // indirect
 	github.com/mattn/go-sqlite3 v1.14.6

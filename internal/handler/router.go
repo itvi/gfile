@@ -16,8 +16,8 @@ func (c *Configuration) Route() http.Handler {
 	r := pat.New()
 
 	// static files
-	r.Get("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static"))))
-	r.Get("/js/", http.StripPrefix("/js/", http.FileServer(http.Dir("./web/template/js"))))
+	r.Get("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(p+"web/static"))))
+	r.Get("/js/", http.StripPrefix("/js/", http.FileServer(http.Dir(p+"web/template/js"))))
 
 	r.Get("/", m1.Append(c.requireAuthenticatedUser).ThenFunc(c.File.Index(c)))
 

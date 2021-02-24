@@ -21,12 +21,12 @@ func (u *UserHandler) Index(c *Configuration) http.HandlerFunc {
 			return
 		}
 		otherTemplates := []string{
-			"./web/template/partial/toolbar_crud.html",
+			p + "web/template/partial/toolbar_crud.html",
 		}
 		data := &TemplateData{
 			Users: users,
 		}
-		c.render(w, r, otherTemplates, "./web/template/html/user/index.html", data)
+		c.render(w, r, otherTemplates, p+"web/template/html/user/index.html", data)
 	}
 }
 
@@ -34,7 +34,7 @@ func (u *UserHandler) AddView(c *Configuration) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		form := form.New(nil)
 		data := &TemplateData{Form: form}
-		c.render(w, r, nil, "./web/template/html/user/add.html", data)
+		c.render(w, r, nil, p+"web/template/html/user/add.html", data)
 	}
 }
 
@@ -50,7 +50,7 @@ func (u *UserHandler) Add(c *Configuration) http.HandlerFunc {
 		form := form.New(r.PostForm)
 		form.Required("sn", "password")
 		data := &TemplateData{Form: form}
-		page := "./web/template/html/user/add.html"
+		page := p + "web/template/html/user/add.html"
 
 		if !form.Valid() {
 			c.render(w, r, nil, page, data)
@@ -122,7 +122,7 @@ func (u *UserHandler) EditView(c *Configuration) http.HandlerFunc {
 			Form: form,
 			User: user,
 		}
-		c.render(w, r, nil, "./web/template/html/user/edit.html", data)
+		c.render(w, r, nil, p+"web/template/html/user/edit.html", data)
 	}
 }
 
@@ -156,7 +156,7 @@ func (u *UserHandler) LoginView(c *Configuration) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		form := form.New(nil)
 		data := &TemplateData{Form: form}
-		c.render(w, r, nil, "./web/template/html/user/login.html", data)
+		c.render(w, r, nil, p+"web/template/html/user/login.html", data)
 	}
 }
 
@@ -178,7 +178,7 @@ func (u *UserHandler) Login(c *Configuration) http.HandlerFunc {
 			data := &TemplateData{
 				Form: form,
 			}
-			c.render(w, r, nil, "./web/template/html/user/login.html", data)
+			c.render(w, r, nil, p+"web/template/html/user/login.html", data)
 			return
 		} else if err != nil {
 			log.Println(err)

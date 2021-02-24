@@ -17,10 +17,10 @@ func (a *CasbinHandler) Index(c *Configuration) http.HandlerFunc {
 		roleName := r.URL.Query().Get(":name")
 		policies := a.M.GetPoliciesOrderBy(roleName)
 		otherTemplates := []string{
-			"./web/template/partial/toolbar_crud.html",
+			p + "web/template/partial/toolbar_crud.html",
 		}
 		data := &TemplateData{Policies: policies}
-		c.render(w, r, otherTemplates, "./web/template/html/casbin/index.html", data)
+		c.render(w, r, otherTemplates, p+"web/template/html/casbin/index.html", data)
 	}
 }
 
@@ -28,7 +28,7 @@ func (a *CasbinHandler) AddView(c *Configuration) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		form := form.New(nil)
 		data := &TemplateData{Form: form}
-		c.render(w, r, nil, "./web/template/html/casbin/add.html", data)
+		c.render(w, r, nil, p+"web/template/html/casbin/add.html", data)
 	}
 }
 
@@ -91,7 +91,7 @@ func (a *CasbinHandler) EditView(c *Configuration) http.HandlerFunc {
 			Form:   form,
 		}
 
-		c.render(w, r, nil, "./web/template/html/casbin/edit.html", data)
+		c.render(w, r, nil, p+"web/template/html/casbin/edit.html", data)
 	}
 }
 
@@ -156,7 +156,7 @@ func (a *CasbinHandler) AddRolesForUserView(c *Configuration) http.HandlerFunc {
 			RolesForUser: userRoles,
 		}
 
-		c.render(w, r, nil, "./web/template/html/casbin/add_roles_for_user.html", data)
+		c.render(w, r, nil, p+"web/template/html/casbin/add_roles_for_user.html", data)
 	}
 }
 

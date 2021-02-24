@@ -21,12 +21,12 @@ func (rl *RoleHandler) Index(c *Configuration) http.HandlerFunc {
 			return
 		}
 		otherTemplates := []string{
-			"./web/template/partial/toolbar_crud.html",
+			p + "web/template/partial/toolbar_crud.html",
 		}
 		data := &TemplateData{
 			Roles: roles,
 		}
-		c.render(w, r, otherTemplates, "./web/template/html/role/index.html", data)
+		c.render(w, r, otherTemplates, p+"web/template/html/role/index.html", data)
 	}
 }
 
@@ -34,7 +34,7 @@ func (rl *RoleHandler) AddView(c *Configuration) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		form := form.New(nil)
 		data := &TemplateData{Form: form}
-		c.render(w, r, nil, "./web/template/html/role/add.html", data)
+		c.render(w, r, nil, p+"web/template/html/role/add.html", data)
 	}
 }
 
@@ -51,7 +51,7 @@ func (rl *RoleHandler) Add(c *Configuration) http.HandlerFunc {
 		form.MaxLength("name", 20)
 		form.MaxLength("desc", 50)
 		data := &TemplateData{Form: form}
-		tplName := "./web/template/html/role/add.html"
+		tplName := p + "web/template/html/role/add.html"
 
 		if !form.Valid() {
 			c.render(w, r, nil, tplName, data)
@@ -112,7 +112,7 @@ func (rl *RoleHandler) EditView(c *Configuration) http.HandlerFunc {
 			Role: role,
 		}
 
-		c.render(w, r, nil, "./web/template/html/role/edit.html", data)
+		c.render(w, r, nil, p+"web/template/html/role/edit.html", data)
 	}
 }
 

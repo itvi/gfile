@@ -9,7 +9,7 @@ type HomeHandler struct{}
 
 func (h *HomeHandler) Index(c *Configuration) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		templateName := "./web/template/index.html"
+		templateName := p + "web/template/index.html"
 		data := &TemplateData{
 			Now: time.Now(),
 		}
