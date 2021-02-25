@@ -104,13 +104,12 @@ func (f *FileHandler) Zip(c *Configuration) http.HandlerFunc {
 		name := r.URL.Query().Get("name")
 		path := r.URL.Query().Get("path")
 
-		pathToZip := p + path
+		pathToZip := f.Dir + path
 		zipName := p + "zip/" + name + ".zip"
-		fmt.Printf("pathtozip: %s, zipname:%s\n", pathToZip, zipName)
 
 		err := util.RecursiveZip(pathToZip, zipName)
 		if err != nil {
-			fmt.Println("zip error:", err)
+			log.Println("zip error:", err)
 			return
 		}
 
