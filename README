@@ -1,0 +1,10 @@
+NOTE: Because use service,so `go run main.go` not working(can't find resource).
+
+Service usage:
+1. go build
+2. gfile -s install -p :9000 -d g:/test
+3. gfile -s start
+
+If you want change port or directory, you need `uninstall` first and reinstall:
+gfile -s uninstall
+gfile -s install -p :9999 -d c:/test

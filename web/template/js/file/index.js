@@ -128,9 +128,10 @@ $(document).ready(function () {
             console.log("please select one or more rows");
             return;
         }
+        $(this).after($('#spinner'));
+        $('#spinner').css('display', 'inline');
         // share links
         var dlink;
-
         var ele = $('#files .selected');
         var file = $(ele).find('span');
         var isdir = file.attr('data-isdir');
@@ -155,6 +156,8 @@ $(document).ready(function () {
                     dlink = window.location.host + "/dl?name=" + r + "&isdir=" + isdir;
                     copy(dlink);
                     notify("已复制到剪贴板", dlink, 20000);
+                    $('#spinner').css('display', 'none');
+                    $('#download').after($('#spinner'));
                 },
                 error: function (x, s, e) {
                     console.log(x, s, e);
@@ -165,6 +168,7 @@ $(document).ready(function () {
             dlink = window.location.host + "/dl?name=" + name + "&path=" + path;
             copy(dlink);
             notify("已复制到剪贴板", dlink, 20000);
+            $('#spinner').css('display', 'none');
         }
     });
 
