@@ -155,7 +155,7 @@ $(document).ready(function () {
                     var r = encodeURIComponent(ret);
                     dlink = window.location.host + "/dl?name=" + r + "&isdir=" + isdir;
                     copy(dlink);
-                    notify("已复制到剪贴板", dlink, 20000);
+                    notify("已复制到剪贴板", dlink, 3600000); // 1 hour
                     $('#spinner').css('display', 'none');
                     $('#download').after($('#spinner'));
                 },
@@ -167,7 +167,7 @@ $(document).ready(function () {
         } else {
             dlink = window.location.host + "/dl?name=" + name + "&path=" + path;
             copy(dlink);
-            notify("已复制到剪贴板", dlink, 20000);
+            notify("已复制到剪贴板", dlink, 3600000);
             $('#spinner').css('display', 'none');
         }
     });
